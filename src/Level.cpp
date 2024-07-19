@@ -22,10 +22,20 @@ Level::Level(const nlohmann::json& j, World* w)
 , bg_color(j["__bgColor"].get<std::string>())
 , depth(j.contains("worldDepth") ? j["worldDepth"].get<int>() : 0)
 {
+    // m_layers.reserve(j["layerInstances"].size());
+    // for (const auto& level : j["layerInstances"]) {
+    //     m_layers.emplace_back(level, w, this);
+    // }
+
     m_layers.reserve(j["layerInstances"].size());
-    for (const auto& level : j["layerInstances"]) {
-        m_layers.emplace_back(level, w, this);
+    for (const auto& layer_name : w->layerOrder) {
+        for (const auto& level : j["layerInstances"]) {
+            if (level["__identifier"].get<std::string>() == layer_name) {
+                m_layers.emplace_back(level, w, this);
+            }
+        }
     }
+
 
     m_neighbours_iid_by_dir.emplace(Dir::None, 0);
     m_neighbours_iid_by_dir.emplace(Dir::North, 0);

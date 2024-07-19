@@ -18,6 +18,16 @@ World::World(const nlohmann::json& j, Project* p, const FileLoader& file_loader,
 , m_name(j.contains("identifier") ? j["identifier"].get<std::string>() : "")
 , m_layout(getWorldLayoutFromString(j["worldLayout"].get<std::string>()))
 {
+
+    layerOrder.reserve(j["defs"]["layers"].size());
+    for (const auto& layer : j["defs"]["layers"]) {
+        //place identifie in layerOrder
+        layerOrder.push_back(layer["identifier"].get<std::string>());
+    }
+
+    //reverse
+    std::reverse(layerOrder.begin(), layerOrder.end());
+
     // parse levels
     m_levels.reserve(j["levels"].size());
     if (!external_levels) {

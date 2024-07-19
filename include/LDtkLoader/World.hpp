@@ -28,6 +28,8 @@ namespace ldtk {
 
         const IID iid;
 
+        std::vector<std::string> layerOrder;
+
         auto getName() const -> const std::string&;
 
         auto getDefaultPivot() const -> const FloatPoint&;
